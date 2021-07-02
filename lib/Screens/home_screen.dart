@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:social_app/Controllers/user_controller.dart';
 import 'package:social_app/Models/user_model.dart';
 import 'package:social_app/Widgets/UserWidget/user_widget.dart';
@@ -14,10 +15,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   UserController userController = Get.put(UserController());
+  RefreshController _refreshController =
+                    RefreshController(initialRefresh: false);
+
+
+  _onRefresh() async{
+    print('onrefresh');
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.refreshCompleted();
+  }
+  _onLoading() async{
+    print('onload');
+    userController.getUsersInfoFormApi();
+    _refreshController.loadComplete();
+  }
+
 
   @override
   void initState() {
     super.initState();
+  }
+  @override
+  void dispose() {
+    userController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,9 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.green,
                     ),
                   )
-                : ListView(
-                    children: HomeScreen.usersWidget,
-                  );
+                :  SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              footer:ClassicFooter(),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
+              child: ListView(
+                children: HomeScreen.usersWidget,
+              ),
+            );
           },
         ),
       ),

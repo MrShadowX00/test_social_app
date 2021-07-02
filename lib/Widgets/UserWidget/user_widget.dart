@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:social_app/Screens/user_screen.dart';
 
 class UserWidget extends StatelessWidget {
-  final String? name;
-  final String? userName;
-  final String? email;
+  final String? title;
+  final String? subtitle;
+  final String? picture;
   final int? id;
+
   const UserWidget({
     Key? key,
-    this.name,
-    this.userName,
-    this.email, this.id,
+    this.id,
+    this.title,
+    this.subtitle,
+    this.picture,
   }) : super(key: key);
 
   @override
@@ -43,18 +45,25 @@ class UserWidget extends StatelessWidget {
                           shape: BoxShape.circle,
                           elevation: 8.0,
                           borderRadius: BorderRadius.circular(50),
-                          child: CircleAvatar(
+                          child: (this.picture == null)?CircleAvatar(
                             radius: 40,
                             backgroundColor: ThemeData.light().primaryColor,
                             child: Center(
                               child: Text(
-                                '${this.name?.substring(0, 1)}',
+                                '${this.title?.substring(0, 1)}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                          ):Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              image: DecorationImage(image: NetworkImage(this.picture!),fit: BoxFit.cover),
                             ),
                           ),
                         ),
@@ -73,7 +82,7 @@ class UserWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Container(
                               child: Text(
-                                '${this.name}',
+                                '${this.title}',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 22,
@@ -86,7 +95,7 @@ class UserWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Container(
                               child: Text(
-                                '@${this.userName}',
+                                '${this.subtitle}',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -95,23 +104,29 @@ class UserWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Container(
-                              child: Text(
-                                '${this.email}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(vertical: 5),
+                          //   child: Container(
+                          //     child: Text(
+                          //       '${this.email}',
+                          //       style: TextStyle(
+                          //         color: Colors.black,
+                          //         fontSize: 16,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UserScreen(
-                                id: this.id,
-                              ),),);
+                              UserScreen.id = this.id;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserScreen(
+                                    userImageUrl: this.picture,
+                                  ),
+                                ),
+                              );
                             },
                             child: PhysicalModel(
                               color: Colors.green,
@@ -125,7 +140,13 @@ class UserWidget extends StatelessWidget {
                                 ),
                                 height: 30,
                                 child: Center(
-                                  child: Text('View more',style: TextStyle(color: Colors.white,fontSize: 16,),),
+                                  child: Text(
+                                    'View more',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

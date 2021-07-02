@@ -14,9 +14,9 @@ class UserController extends GetxController{
       for (int k = 0; k < HomeScreen.users.length; k++) {
         HomeScreen.usersWidget.add(
           UserWidget(
-            email: HomeScreen.users[k].email,
-            name: HomeScreen.users[k].name,
-            userName: HomeScreen.users[k].username,
+            title: HomeScreen.users[k].login,
+            subtitle: HomeScreen.users[k].id.toString(),
+            picture: HomeScreen.users[k].avatarUrl,
             id: k,
           ),
         );
