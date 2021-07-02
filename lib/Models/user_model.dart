@@ -52,7 +52,8 @@ class User {
 
   static Future getUserInfo()async{
     Dio dio = Dio();
-    var response   = await dio.get('https://jsonplaceholder.typicode.com/users');
+      var response = await dio.get(
+          'https://jsonplaceholder.typicode.com/users');
     return response.data;
   }
 }
